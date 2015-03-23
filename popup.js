@@ -23,25 +23,35 @@ chrome.tabs.getSelected(null, function(tab) {
   });
   function updateLink(link, deepLink, title, shortlink) {
     shortlink = shortlink || false;
-    var fullUrl = 'localhost:8080/deeplinker/?ga=' + deepLink +
+    //var host = 'localhost:8080';
+    var host = 'ga-dev-tools.appspot.com';
+    var fullUrl = host + '/deeplinker/?ga=' + deepLink +
     '&title=' + title;
     if(shortlink) {
-      link.innerHTML = shortenLink(fullUrl);
+      shortenLink(fullUrl).then(function(shortUrl) {
+        link.innerHTML = shortUrl;
+      });
     }
     else {
       link.innerHTML = fullUrl;
     }
   }
   function shortenLink(url) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            alert(xhr.responseText);
-        }
-    }
-    xhr.open('post', 'https://www.googleapis.com/urlshortener/v1/url?' + 
-      'key=' + API_KEY + '&longUrl=' + url);
-    xhr.send()
+    return new Promise(function(resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+              var json = JSON.parse(xhr.responseText);
+              console.log(json["id"]);
+              resolve(json["id"]);
+          }
+      }
+      API_KEY = '';
+      xhr.open('post', 'https://www.googleapis.com/urlshortener/v1/url?' + 
+        'key=' + API_KEY);
+      xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      xhr.send('{ longUrl: "' + url + '"}');
+    });
   }
 });
 
