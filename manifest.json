@@ -1,7 +1,7 @@
 {
-  "name": "Page action by URL",
+  "name": "Google Analytics DeepLinker",
   "version": "1.0",
-  "description": "Shows a page action for urls which have the letter 'g' in them.",
+  "description": "Provides shareable links to Google Analytics reports",
   "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -12,10 +12,6 @@
     "default_title" : "GA DeepLinker",
     "default_popup": "popup.html"
   },
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["content.js"]
-  }],
   "permissions" : [
     "declarativeContent",
     "tabs"

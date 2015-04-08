@@ -8,6 +8,9 @@ chrome.tabs.getSelected(null, function(tab) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     title.value = tabs[0].title.substr(0, tabs[0].title.length - 19);
     updateLink(link, deepLink, title.value);
+
+    checkSegments(tabs[0].url);
+    checkCustomReports(tabs[0].url);
   });
   title.addEventListener('input', function() {
     updateLink(link, deepLink, title.value);
@@ -21,6 +24,18 @@ chrome.tabs.getSelected(null, function(tab) {
     }
 
   });
+  function checkSegments(url) {
+
+  }
+  function checkCustomReports(url) {
+    if(url.indexOf('my-reports') > -1) {
+      console.log('it worked');
+      document.getElementById('error').innerHTML = '<a' +
+      'href="https://support.google.com/analytics/answer/1151300#AccessManageShare' + 
+      '">Custom reports can be shared</a>' + 
+      ' using a permalink.';
+    }
+  }
   function updateLink(link, deepLink, title, shortlink) {
     shortlink = shortlink || false;
     //var host = 'localhost:8080';
